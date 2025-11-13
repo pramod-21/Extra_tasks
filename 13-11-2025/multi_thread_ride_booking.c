@@ -53,6 +53,30 @@ void *ticket_cancel(void* arg){
 }
 
 int main(){
+	pthread_t threads[5];
+	pthread_mutex_init(&mutex, NULL);
+	int choice;
+	for(int i=0; i<5; i++){
+		printf("Enter 1 to book a ticket or 2 to cancel a ticket: ");
+		scanf("%d", &choice);
+		if(choice == 1){
+			pthread_create(&threads[i], NULL, ticket_book, NULL);
+		}
+		else if(choice == 2){
+			pthread_create(&threads[i], NULL, ticket_cancel, NULL);
+		}
+		else{
+			printf("Invalid choice, enter 1 to book or 2 to cancel.\n");
+			i--; //to repeat the iteration for valid input
+			continue;
+		}
+		pthread_join(threads[i], NULL);
+	}
+	printf("Status of the seats:\n");
+	printf("Total booked seats: %d\n", booked_seats);
+	printf("Total cancelled seats: %d\n", cancelled_seats);
+	printf("Available seats: %d\n", available_seats);
+	pthread_mutex_destroy(&mutex);
 	return 0;
 }
 
