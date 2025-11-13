@@ -32,7 +32,23 @@ void *ticket_book(void* arg){
 }
 
 //function for ticket cancelling
-void *ticket_cancel(){
+void *ticket_cancel(void* arg){
+	int seat_no = *((int *)arg);
+	pthread_mutex_lock(&mutex);
+	int found = 0;
+	for(int i=0; i<5; i++){
+		if(ticket[i] == 1){
+			ticket[i] = 0; //marking seat as available
+			cancelled_seats++;
+			available_seats++;
+			printf("Seat number %d cancelled successfully!\n", i+1);
+			found = 1;
+			break;
+		}
+	}
+	if(!found){
+		printf("No booked seats to cancel.\n");
+	}
 	return NULL;
 }
 
